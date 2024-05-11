@@ -3,7 +3,7 @@
 # docker-script
 Some scripts for creating and configuring dockers.
 
-Usually, as a server manager, you need create a new docker for someone and configure the docker (e.g., install `oepnssh-server`, configure `sshd`, update the password of `root`, etc.). This can be annoying, if a log of persons let you create new dockers for them. But, don't worry, this script will help you create a docker and configure it automatically.
+Usually, as a server manager, you need create a new docker for someone and configure the docker (e.g., install `oepnssh-server`, configure `sshd`, update the password of `root`, etc.). This can be annoying, if a lot of persons let you create new dockers for them. But, don't worry, this script will help you create a docker and configure it automatically.
 
 # How to Use This?
 This part is for the server managers, if you are a user of the new docker, you can jump to [here](#something-for-docker-users).
@@ -169,7 +169,7 @@ Let me show you an example creating a user named `kaiser` (note that you should 
 
     Fist login the docker with `kaiser`. Then change the `PermitRootLogin yes` with `PermitRootLogin no` of `/etc/ssh/sshd_config` (use `sudo vim /etc/ssh/sshd_config` to edit the file).
 
-    Restart you ssh service by using this command: `sudo service ssh restart`.
+    Restart your ssh service by using this command: `sudo service ssh restart`.
 
     After finishing this, anyone can not login as `root` even with the right password or ssh key.
 
@@ -179,7 +179,7 @@ Let me show you an example creating a user named `kaiser` (note that you should 
 
     Fist login the docker with `kaiser`. Then change the `PasswordAuthentication yes` with `PasswordAuthentication no` of `/etc/ssh/sshd_config` (use `sudo vim /etc/ssh/sshd_config` to edit the file).
 
-    Restart you ssh service by using this command: `sudo service ssh restart`.
+    Restart your ssh service by using this command: `sudo service ssh restart`.
 
     Once you finish this, you cannot login with password. This is really safe. Even someone have peeped your password, they cannot login with your password, unless the hack your ssh key.
 
