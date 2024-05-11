@@ -276,7 +276,8 @@ $sudo_cmd apt install -y openssh-server
 if ! $sudo_cmd cat /etc/ssh/sshd_config | ${sudo_cmd} grep "^\s*PermitRootLogin\s\+yes\s*\$"; then
     $sudo_cmd echo "PermitRootLogin yes" | $sudo_cmd tee -a /etc/ssh/sshd_config || exit 1
 fi
-if ! $sudo_cmd cat /etc/ssh/sshd_config | ${sudo_cmd} grep "^\s*PasswordAuthentication\s\+yes\s*\$"; then
+if ! $sudo_cmd cat /etc/ssh/sshd_config | \
+    ${sudo_cmd} grep "^\s*PasswordAuthentication\s\+yes\s*\$"; then
     $sudo_cmd echo "PasswordAuthentication yes" | $sudo_cmd tee -a /etc/ssh/sshd_config || exit 1
 fi
 

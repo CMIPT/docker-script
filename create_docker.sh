@@ -62,6 +62,8 @@ usage() {
     exit "$1"
 }
 
+# Note that the -l and -o cannot be truncated, 
+# Make sure the parameters after -l and -o are at the smae line, even it is too long
 if ! options=$(getopt \
     -o n:p:Pw:g:e:d:v:f:a:h \
     -l name:,publish:,publish-all,with-gpu:,gpus:,env:,distro:,volume:,file:,auto-install:,password:,help \
