@@ -1,5 +1,11 @@
 [中文版本](README-zh.md)
 
+# Release Log
+
+## Release-v0.1.0
+* Finish basic functionalities of scripts.
+* Finish README.md of English version.
+
 # docker-script
 Some scripts for creating and configuring dockers.
 
