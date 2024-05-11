@@ -149,7 +149,9 @@ confirm_cmd() {
         echo -n "[Y/n]:"
         read -r confirm
         if [ "$confirm" == 'y' ] || [ "$confirm" == '' ]; then
-            bash -c "$1"
+            if ! bash -c "$1"; then
+                exit 1
+            fi
             break
         elif [ "$confirm" == 'n' ]; then
             return 1
@@ -166,9 +168,7 @@ docker_create_cmd="    $sudo_cmd docker run \\
     ${gpus[*]} \\
     ${envs[*]} \\
     ${volume[*]} \\
-    $distro \\
-    && \\
-    $sudo_cmd docker start $pure_name"
+    $distro"
 if ! confirm_cmd "$docker_create_cmd"; then
     echo "terminated"
     exit 1
@@ -187,9 +187,9 @@ fi
 docker_enter_cmd="    $sudo_cmd docker exec \\
     -it ${pure_name} \\
     bash"
-if [ "$autoinstall" -eq 1 ]; then
+if [ "$autoinstall" -eq 1 ] && [ "$file_or_dir" == "./docker_initializer" ]; then
 docker_enter_cmd="$docker_enter_cmd \\
-    -c \"cd /docker_initializer && bash /docker_initializer/installer.sh $password\""
+    -c \"cd /docker_initializer && bash installer.sh $password\""
 fi
 if ! confirm_cmd "$docker_enter_cmd"; then
     echo "terminated"

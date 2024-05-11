@@ -8,27 +8,16 @@ sudo_cmd=$(which sudo)
 $sudo_cmd apt update
 $sudo_cmd apt install -y ca-certificates
 
-# install lsb_release
-if ! which lsb_release; then
-    $sudo_cmd apt update
-    $sudo_cmd apt install -y lsb-release
-    # this is unlikely to happen
-    if ! which lsb_release; then
-        echo "unexpected: there is no lsb_release and installation failed"
-    fi
-
-fi
-
 # change the apt source
 # this only works for Ubuntu 22.04 and Ubuntu 20.04
 # the original source.list will be renamed with source.list.bak
-if lsb_release -a | grep -i ubuntu; then
-        $sudo_cmd cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    if lsb_release -a | grep '22\.04'; then
+if $sudo_cmd cat /etc/os-release | grep -i ubuntu; then
+    $sudo_cmd cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    if $sudo_cmd cat /etc/os-release | grep '22\.04'; then
         $sudo_cmd cat ./sources.list.tuna-22.04 | $sudo_cmd tee /etc/apt/sources.list || exit 1
         $sudo_cmd cat ./sources.list.tuna-22.04 | $sudo_cmd tee /etc/apt/sources.list || exit 1
         $sudo_cmd apt update || exit 1
-    elif lsb_release -a | grep '20\.04'; then
+    elif $sudo_cmd cat /etc/os-release | grep '20\.04'; then
         $sudo_cmd cat ./sources.list.tuna-20.04 | $sudo_cmd tee /etc/apt/sources.list || exit 1
         $sudo_cmd apt update || exit 1
     else
