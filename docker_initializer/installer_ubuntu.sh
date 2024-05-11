@@ -21,11 +21,11 @@ if $sudo_cmd cat /etc/os-release | grep -i ubuntu; then
         $sudo_cmd cat ./sources.list.tuna-20.04 | $sudo_cmd tee /etc/apt/sources.list || exit 1
         $sudo_cmd apt update || exit 1
     else
-        ${sudo_cmd} echo "unexpected: only support ubuntu-22.04 and ubuntu-20.04" | \
-            ${sudo_cmd}  tee installer-ubuntu.log
+        $sudo_cmd echo "unexpected: only support ubuntu-22.04 and ubuntu-20.04" | \
+            $sudo_cmd  tee installer-ubuntu.log
     fi
 else
-    echo "unexpected: only support for ubuntu" | tee installer-ubuntu.log
+    $sudo_cmd echo "unexpected: only support for ubuntu" | $sudo_cmd tee installer-ubuntu.log
     exit 1
 fi
 
@@ -43,11 +43,11 @@ $sudo_cmd apt install -y vim git
 $sudo_cmd apt install -y openssh-server
 
 # config ssh
-if ! $sudo_cmd cat /etc/ssh/sshd_config | ${sudo_cmd} grep "^\s*PermitRootLogin\s\+yes\s*\$"; then
+if ! $sudo_cmd cat /etc/ssh/sshd_config | $sudo_cmd grep "^\s*PermitRootLogin\s\+yes\s*\$"; then
     $sudo_cmd echo "PermitRootLogin yes" | $sudo_cmd tee -a /etc/ssh/sshd_config || exit 1
 fi
 if ! $sudo_cmd cat /etc/ssh/sshd_config | \
-    ${sudo_cmd} grep "^\s*PasswordAuthentication\s\+yes\s*\$"; then
+    $sudo_cmd grep "^\s*PasswordAuthentication\s\+yes\s*\$"; then
     $sudo_cmd echo "PasswordAuthentication yes" | $sudo_cmd tee -a /etc/ssh/sshd_config || exit 1
 fi
 

@@ -6,6 +6,9 @@
 * Finish basic functionalities of scripts.
 * Finish README.md of English version.
 
+## Release-v0.1.0
+* Fix some typos
+
 # docker-script
 Some scripts for creating and configuring dockers.
 
@@ -15,19 +18,21 @@ Usually, as a server manager, you need create a new docker for someone and confi
 This part is for the server managers, if you are a user of the new docker, you can jump to [here](#something-for-docker-users).
 
 ## Basic Usages
+**Note: the `apt update` and `apt install ca-certificates` may be very slow. You can run `export all_proxy=http://proxyaddress:port` to configure proxy before running the script.**
+
 In general, mostly, you just need create a new docker with or with no `gpu`, so the simple way to use it is:
 
 ```bash
-# create a new docker with all gpus and configure the docker automatically
+# create a new docker with all `gpu`s and configure the docker automatically
 bash create_docker.sh -n <new_docker_name> -p <new_port:22>
 
-# create a new docker with no gpu and configure the docker automatically
+# create a new docker with no `gpu` and configure the docker automatically
 bash create_docker.sh -n <new_docker_name> -p <new_port:22> -w 0
 ```
 
-The first command will create a docker with all gpus, then configure the docker automatically. The creation is same with `docker run -dit --name <new_docker_name> --publish <new_port:22> --gpus all -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all ubuntu:latest` (as you can see, the command for creating a new docker with all gpus is extremely long). In the creation command, the default distro is `ubuntu:latest`, you can use `-d` or `--distro` to specify the distro. After creation the script will copy `./docker_initializer` (the scripts for configuring a new docker) to `new_docker_name:/`, you can use `-f` or `--file` to specify which file or directory you want to copy, but you usually don't need use this. The copy is same with `docker cp ./docker_initializer <new_docker_name>:/`. After copy, the scripts for configuring a new docker will be executed in the new docker. This process is done by `docker exec -it bash -c "cd /docker_initializer && bash installer.sh $password"` (the variable password is to determine whether or not to configure the password of user `root`, the default value is `1`, you can use `--password 0` when running `create_docker.sh`), As you can see configure process is done by `bash -c "cd /docker_initializer && bash installer.sh $password"`, so this process will only done the `-f` or `--file`'s value is same with the default value, and if it is not, the command will be run `docker exec -it bash` (enter the docker with `bash`).
+The first command will create a docker with all `gpu`s, then configure the docker automatically. The creation is same with `docker run -dit --name <new_docker_name> --publish <new_port:22> --gpus all -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all ubuntu:latest` (as you can see, the command for creating a new docker with all `gpu`s is extremely long). In the creation command, the default distro is `ubuntu:latest`, you can use `-d` or `--distro` to specify the distro. After creation the script will copy `./docker_initializer` (the scripts for configuring a new docker) to `new_docker_name:/`, you can use `-f` or `--file` to specify which file or directory you want to copy, but you usually don't need use this. The copy is same with `docker cp ./docker_initializer <new_docker_name>:/`. After copy, the scripts for configuring a new docker will be executed in the new docker. This process is done by `docker exec -it bash -c "cd /docker_initializer && bash installer.sh $password"` (the variable password is to determine whether or not to configure the password of user `root`, the default value is `1`, you can use `--password 0` when running `create_docker.sh`), As you can see configure process is done by `bash -c "cd /docker_initializer && bash installer.sh $password"`, so this process will only done the `-f` or `--file`'s value is same with the default value, and if it is not, the command will be run `docker exec -it bash` (enter the docker with `bash`).
 
-In the three processes above, if any one fails, the script will stop, so you can see what wrong with it. Besides, before executing any command before, the script will print what will be executed so that you can check if the command is what you want, once you finish the check, you can press `<CR>` or `y<CR>` (press the enter key directly or input `y` then press enter key), it is worth mentioning that the `y` you input must be a lowercase one.
+In the three processes above, if any one fails, the script will stop, so you can see what's wrong with it. Besides, before executing any command before, the script will print what will be executed so that you can check if the command is what you want, once you finish the check, you can press `<CR>` or `y<CR>` (press the enter key directly or input `y` then press enter key), it is worth mentioning that the `y` you input must be a lowercase one.
 
 ## Advanced Usages
 Maybe when you create a new docker you want to mount some directories, you can use `-v` or `--volume` to do this.
@@ -62,7 +67,7 @@ Options:
 
     -f, --file:           a file or a directory will be copied into the new docker. The default
 :                         value is './docker_initializer'. If you don't want to copy files into the
-:                         docker, you can input 'n' when confirming the command. If you want copy
+:                         docker, you can input 'n' when confirming the command. If you want to copy
 :                         more than one file, you need put all the files into a directory, then use
 :                         '-f dir' to copy the whole directory.
 
@@ -100,19 +105,19 @@ This part is for a new docker user.
 
 First, you should have to know what the script have done for your new docker:
 * Change the `apt` sources
-* Install `sudo`, `openssh-server`, `vim`, and `git`.
+* Install `sudo`, `ca-certificates`, `openssh-server`, `vim`, and `git`.
 * Enable `root` login and password login.
 * Configure a new password for your first login.
 
 There are some brief explanations why these will be done:
 * When `apt` downloads from the original webs, it may be very slow. Therefore, the script changed the sources so that `apt` can download from `THU`'s server.
 * Install some basic tools.
-* When `ssh` is on, it will not allow you login as `root` user or with password. And configure a new `ssh` key should be done by the user (so that they can chose `passphrase` when creating). So the script just turned on these configurations.
+* When `ssh` is on, it will not allow you to login as `root` user or with password. And configure a new `ssh` key should be done by the user (so that they can chose `passphrase` when creating). Therefore, the script just turned on these configurations.
 * You must have a new password for the first login, so the script will create a one.
 
 ## What Should I Do Next?
 
-**This is not only what you should do for the docker, but those you should do every time you get a server or docker.**
+**These below are not only what you should do for the docker, but those you should do every time that you get a server or docker.**
 
 If you don't want to do any configurations, the docker may also work, but this may be very inconvenient and unsafe.
 
@@ -131,7 +136,7 @@ Let me show you an example creating a user named `kaiser` (note that you should 
 
 2. Let us update the `root`'s password.
 
-    Use this to update `root`'s password: `sudo passwd`. You just need enter your new password (the password should be complex and not your usually used passwrod, because you are not supposed to login with root anymore) and press enter (you need do this twice).
+    Use this to update `root`'s password: `sudo passwd`. You just need enter your new password (the password should be complex and not your usually used password, because you are not supposed to login with root anymore) and press enter (you need do this twice).
 
     Once this is finished, `root`'s password is updated, keep the new one in mind.
 
@@ -147,7 +152,7 @@ Let me show you an example creating a user named `kaiser` (note that you should 
 
 4. Let us configure ssh key for `kaiser`.
 
-    First use `exit` to close this connect, and make sure now the shell is **your system's one** (or you can do this by opening a new terminal).
+    First, use `exit` to close this connect, and make sure now the shell is **your system's one** (or you can do this by opening a new terminal).
 
     If you don't have a ssh key, you may need create a new one. This command will help you: `ssh-keygen`. For simple way, you just need press enter key when it requires your confirm. If you already have one, just use the one you have created before.
 
@@ -159,9 +164,9 @@ Let me show you an example creating a user named `kaiser` (note that you should 
 
     Now you can use `ssh -p port kaiser@address` to login your docker without inputting any password. This is OK, but every time you must enter `-p port kaiser@address` this is inconvenient.
 
-    First, you should find where your `.ssh` is. This is usually in your home directory. Consume the username of your computer is `kaiser`, in `Windows` it will be in `C:\Users\kaiser\.ssh`, and in `unix-like` system it will be in `/home/kaiser/.ssh`.
+    First, you should find where your `.ssh` is. This is usually in your home directory. Assume the username of your computer is `kaiser`, in `Windows` it will be in `C:\Users\kaiser\.ssh`, and in `unix-like` system it will be in `/home/kaiser/.ssh`.
 
-    Once you find the `.ssh` directory, enter it. And create a file called `config` without any extension (in `Windows`, you should be carefully, and you must make sure you can see the extensions so that the filename is `config` rather than `config.txt`, etc.), and if there have been already one, you just need open it. Now that you have opened the file, append this below to the file:
+    Once you find the `.ssh` directory, enter it. And create a file called `config` without any extension (in `Windows`, you should be careful, and you must make sure you can see the extensions so that the filename is `config` rather than `config.txt`, etc.), and if there has been already one, you just need open it. Now that you have opened the file, append this below to the file:
 
     ```bash
     Host labserver
@@ -169,27 +174,29 @@ Let me show you an example creating a user named `kaiser` (note that you should 
       User kaiser
       Port port
     ```
-    Don't forget change the `address` and `port`. And don't forget change all `kaiser`s with your username.
+    Don't forget change the `address` and `port`. And don't forget change all `kaiser`s with your username. After saving the file, you can use `ssh labserver` to login.
 
 6. This process is to make your docker unable to login using `root` user (this is optional but strongly recommended).
 
-    Fist login the docker with `kaiser`. Then change the `PermitRootLogin yes` with `PermitRootLogin no` of `/etc/ssh/sshd_config` (use `sudo vim /etc/ssh/sshd_config` to edit the file).
+    First, login the docker with `kaiser` (if you've finished all above, you can use `ssh labserver` to login). Then change the `PermitRootLogin yes` with `PermitRootLogin no` of `/etc/ssh/sshd_config` (use `sudo vim /etc/ssh/sshd_config` to edit the file).
 
     Restart your ssh service by using this command: `sudo service ssh restart`.
 
     After finishing this, anyone can not login as `root` even with the right password or ssh key.
 
-    You may ask: if I really want login as `root`, what should I do? You just login as `kaiser`, then use `su root` on the docker, input the password of `root`, then you can login as `root`.
+    You may ask: if I really want to login as `root`, what should I do? You just login as `kaiser`, then use `su root` on the docker, input the password of `root`, then you can login as `root`.
 
 7. This process is to make your docker unable to login using password (if you want to do this, make sure now you can login with the ssh key).
 
-    Fist login the docker with `kaiser`. Then change the `PasswordAuthentication yes` with `PasswordAuthentication no` of `/etc/ssh/sshd_config` (use `sudo vim /etc/ssh/sshd_config` to edit the file).
+    First, login the docker with `kaiser`. Then change the `PasswordAuthentication yes` with `PasswordAuthentication no` of `/etc/ssh/sshd_config` (use `sudo vim /etc/ssh/sshd_config` to edit the file).
 
     Restart your ssh service by using this command: `sudo service ssh restart`.
 
-    Once you finish this, you cannot login with password. This is really safe. Even someone have peeped your password, they cannot login with your password, unless the hack your ssh key.
+    Once you finish this, you cannot login with password. This is really safe. Even if someone have peeped your password, they cannot login with your password, unless they have hacked your ssh key.
 
 # How Can I Add Some More Scripts for Different Distros
+This part is for someone who wants to add some new scripts to the repository.
+
 As you can see, the repository now only have `install_ubuntu.sh` that works for `ubuntu`. But don't worry if you want to contribute to this repository and make the scripts work for other distros, that is very easy to do. Let me show you how.
 
 Generally, the `create_docker.sh` need no updates. You just need update `docker_initializer/installer.sh` and `docker_initializer/installer_distro.sh` the first one is to chose which installer will be executed, its contents is like this:
@@ -210,7 +217,7 @@ else
 fi
 ```
 
-What you need to do for this one is simply add a new `elfi`, for example, if you want add a new installer for `centos`, it may look like this:
+What you need to do for this one is simply add a new `elfi`, for example, if you want to add a new installer for `centos`, it may look like this:
 
 ```bash
 #!/usr/bin/env bash
@@ -231,7 +238,7 @@ else
 fi
 ```
 
-Then you need to update the second file. For this example, you need create a file name `installer_centos.sh` int the same directory. And write what you want do for the new distro. Here is what I have done in `installer_ubuntu.sh`:
+Then you need to update the second file. For this example, you need create a file name `installer_centos.sh` in the same directory. And write what you want to do for the new distro. Here is what I have done in `installer_ubuntu.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -257,11 +264,11 @@ if $sudo_cmd cat /etc/os-release | grep -i ubuntu; then
         $sudo_cmd cat ./sources.list.tuna-20.04 | $sudo_cmd tee /etc/apt/sources.list || exit 1
         $sudo_cmd apt update || exit 1
     else
-        ${sudo_cmd} echo "unexpected: only support ubuntu-22.04 and ubuntu-20.04" | \
-            ${sudo_cmd}  tee installer-ubuntu.log
+        $sudo_cmd echo "unexpected: only support ubuntu-22.04 and ubuntu-20.04" | \
+            $sudo_cmd  tee installer-ubuntu.log
     fi
 else
-    echo "unexpected: only support for ubuntu" | tee installer-ubuntu.log
+    $sudo_cmd echo "unexpected: only support for ubuntu" | $sudo_cmd tee installer-ubuntu.log
     exit 1
 fi
 
@@ -279,11 +286,11 @@ $sudo_cmd apt install -y vim git
 $sudo_cmd apt install -y openssh-server
 
 # config ssh
-if ! $sudo_cmd cat /etc/ssh/sshd_config | ${sudo_cmd} grep "^\s*PermitRootLogin\s\+yes\s*\$"; then
+if ! $sudo_cmd cat /etc/ssh/sshd_config | $sudo_cmd grep "^\s*PermitRootLogin\s\+yes\s*\$"; then
     $sudo_cmd echo "PermitRootLogin yes" | $sudo_cmd tee -a /etc/ssh/sshd_config || exit 1
 fi
 if ! $sudo_cmd cat /etc/ssh/sshd_config | \
-    ${sudo_cmd} grep "^\s*PasswordAuthentication\s\+yes\s*\$"; then
+    $sudo_cmd grep "^\s*PasswordAuthentication\s\+yes\s*\$"; then
     $sudo_cmd echo "PasswordAuthentication yes" | $sudo_cmd tee -a /etc/ssh/sshd_config || exit 1
 fi
 

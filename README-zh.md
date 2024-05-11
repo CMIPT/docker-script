@@ -1,3 +1,3 @@
-Pull requests are welcome for the translation are welcome.
+Pull requests for the translation are welcome.
 
 
