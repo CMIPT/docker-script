@@ -6,8 +6,12 @@
 * Finish basic functionalities of scripts.
 * Finish README.md of English version.
 
-## Release-v0.1.0
+## Release-v0.1.1
 * Fix some typos
+
+## Release-v0.1.2
+* Fix a bug: `-v` can not work
+* Add an option that can control whether or not to restart the new docker when physical machine restarts
 
 # docker-script
 Some scripts for creating and configuring dockers.
@@ -71,14 +75,17 @@ Options:
 :                         more than one file, you need put all the files into a directory, then use
 :                         '-f dir' to copy the whole directory.
 
-     -a, --auto-install:  whether or not to install automatically, the default value is 1. When
+    -a, --auto-install:   whether or not to install automatically, the default value is 1. When
 :                         enabled, this will install some basic tools rather than just enter the
 :                         new docker.
 
-    --password:    whether or not to add a password for the root user, the default value is
+    --password:           whether or not to add a password for the root user, the default value is
 :                         1. When enabled, this will add password for the root user until success.
 
-     -h, --help:          print the manual page.
+    --auto-restart:       whether or not to restart the docker when physical machine restarts. The
+:                         default value is 1, you can use --auto-restart 0 to disable this.
+
+    -h, --help:           print the manual page.
 
 Example:
     $0 --name newdocker --publish 7777:22 --with-gpu 1 --gpus all -e \\
@@ -87,15 +94,6 @@ Example:
     $0 -n newdocker -p 7777:22
 
     $0 --name newdocker --publish 7777:22 --with-gpu 0 --distro ubuntu:latest --file \\
-    ./docker_initializer
-
-    $0 -n newdocker -p 7777:22 -w 0
-
-Note:
-    The second example will acts same as the first one does.
-    The fourth example will acts same as the third one does.
-    If you want to pass more than one argument for the same option, you should use more than one
-    (e.g., -p 22:22 -p 33:33).
 ```
 
 # Something for Docker Users
