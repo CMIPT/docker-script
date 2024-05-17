@@ -27,18 +27,21 @@ Options:
 
     -f, --file:           a file or a directory will be copied into the new docker. The default
 :                         value is './docker_initializer'. If you don't want to copy files into the
-:                         docker, you can input 'n' when confirming the command. If you want copy
+:                         docker, you can input 'n' when confirming the command. If you want to copy
 :                         more than one file, you need put all the files into a directory, then use
 :                         '-f dir' to copy the whole directory.
 
-     -a, --auto-install:  whether or not to install automatically, the default value is 1. When
+    -a, --auto-install:   whether or not to install automatically, the default value is 1. When
 :                         enabled, this will install some basic tools rather than just enter the
 :                         new docker.
 
-    --password:    whether or not to add a password for the root user, the default value is
+    --password:           whether or not to add a password for the root user, the default value is
 :                         1. When enabled, this will add password for the root user until success.
 
-     -h, --help:          print the manual page.
+    --auto-restart:       whether or not to restart the docker when physical machine restarts. The
+:                         default value is 1, you can use --auto-restart 0 to disable this.
+
+    -h, --help:           print the manual page.
 
 Example:
     $0 --name newdocker --publish 7777:22 --with-gpu 1 --gpus all -e \\
@@ -66,7 +69,7 @@ usage() {
 # Make sure the parameters after -l and -o are at the smae line, even it is too long
 if ! options=$(getopt \
     -o n:p:Pw:g:e:d:v:f:a:h \
-    -l name:,publish:,publish-all,with-gpu:,gpus:,env:,distro:,volume:,file:,auto-install:,password:,help \
+    -l name:,publish:,publish-all,with-gpu:,gpus:,env:,distro:,volume:,file:,auto-install:,password:,auto-restart:,help \
     -n "$(basename "$0")" -- "$@"); then
     usage 1
 fi
@@ -80,6 +83,7 @@ envs=()
 volume=()
 autoinstall=1
 password=1
+autorestart=1
 while true ; do
     case "$1" in
         -n|--name) name+=("--name $2"); pure_name=$2; shift 2;;
@@ -89,10 +93,11 @@ while true ; do
         -g|--gpus) gpus+=("--gpus $2"); shift 2;;
         -e|--env) envs+=("--env $2"); shift 2;;
         -d|--distro) distro="$2"; shift 2;;
-        -v|--volume) volume+=("$2"); shift 2;;
+        -v|--volume) volume+=("--volume $2"); shift 2;;
         -f|--file) file_or_dir="$2"; shift 2;;
         -a|--auto-install) autoinstall="$2"; shift 2;;
         --password) password="$2"; shift 2;;
+        --auto-restart) autorestart="$2"; shift 2;;
         -h|--help) usage 0;;
         --) shift; break;;
         *) usage 1;;
@@ -196,6 +201,14 @@ fi
 if ! confirm_cmd "$docker_enter_cmd"; then
     echo "terminated"
     exit 1
+fi
+
+autorestart_cmd="docker update --restart=always $pure_name"
+if [ "$autorestart" -eq 1 ]; then
+    if ! confirm_cmd "$autorestart_cmd"; then
+        echo "terminated"
+        exit 1
+    fi
 fi
 
 exit 0
