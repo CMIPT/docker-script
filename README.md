@@ -1,17 +1,16 @@
 [中文版本](README-zh.md)
 
 # Release Log
-
-## Release-v0.1.0
-* Finish basic functionalities of scripts.
-* Finish README.md of English version.
+## Release-v0.1.2
+* Fix a bug: `-v` can not work
+* Add an option that can control whether or not to restart the new docker when physical machine restarts
 
 ## Release-v0.1.1
 * Fix some typos
 
-## Release-v0.1.2
-* Fix a bug: `-v` can not work
-* Add an option that can control whether or not to restart the new docker when physical machine restarts
+## Release-v0.1.0
+* Finish basic functionalities of scripts.
+* Finish README.md of English version.
 
 # docker-script
 Some scripts for creating and configuring dockers.
@@ -88,12 +87,21 @@ Options:
     -h, --help:           print the manual page.
 
 Example:
-    $0 --name newdocker --publish 7777:22 --with-gpu 1 --gpus all -e \\
+    $0 --name newdocker --publish 7777:22 --with-gpu 1 --gpus all -e \
     NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all ubuntu:latest
 
     $0 -n newdocker -p 7777:22
 
-    $0 --name newdocker --publish 7777:22 --with-gpu 0 --distro ubuntu:latest --file \\
+    $0 --name newdocker --publish 7777:22 --with-gpu 0 --distro ubuntu:latest --file \
+    ./docker_initializer
+
+    $0 -n newdocker -p 7777:22 -w 0
+
+Note:
+    The second example will acts same as the first one does.
+    The fourth example will acts same as the third one does.
+    If you want to pass more than one argument for the same option, you should use more than one
+    (e.g., -p 22:22 -p 33:33).
 ```
 
 # Something for Docker Users
@@ -197,7 +205,7 @@ This part is for someone who wants to add some new scripts to the repository.
 
 As you can see, the repository now only have `install_ubuntu.sh` that works for `ubuntu`. But don't worry if you want to contribute to this repository and make the scripts work for other distros, that is very easy to do. Let me show you how.
 
-Generally, the `create_docker.sh` need no updates. You just need update `docker_initializer/installer.sh` and `docker_initializer/installer_distro.sh` the first one is to chose which installer will be executed, its contents is like this:
+Generally, the `create_docker.sh` need no updates. You just need update `docker_initializer/installer.sh` and `docker_initializer/installer_distro.sh` the first one is to chose which installer will be executed, its contents are like the following:
 
 ```bash
 #!/usr/bin/env bash
@@ -215,7 +223,7 @@ else
 fi
 ```
 
-What you need to do for this one is simply add a new `elfi`, for example, if you want to add a new installer for `centos`, it may look like this:
+What you need to do for this one is simply add a new `elif`, for example, if you want to add a new installer for `centos`, it may look like this:
 
 ```bash
 #!/usr/bin/env bash
@@ -236,7 +244,7 @@ else
 fi
 ```
 
-Then you need to update the second file. For this example, you need create a file name `installer_centos.sh` in the same directory. And write what you want to do for the new distro. Here is what I have done in `installer_ubuntu.sh`:
+Then you need to update the second file. For this example, you need create a file named `installer_centos.sh` in the same directory. And write what you want to do for the new distro. Here is what I have done in `installer_ubuntu.sh`:
 
 ```bash
 #!/usr/bin/env bash
