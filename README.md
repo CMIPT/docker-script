@@ -1,6 +1,10 @@
 [中文版本](README-zh.md)
 
 # Release Log
+## Release-v0.1.3
+* Fix typos
+* Add `sudo` before the `docker update --restart=always` command
+
 ## Release-v0.1.2
 * Fix a bug: `-v` can not work
 * Add an option that can control whether or not to restart the new docker when physical machine restarts
