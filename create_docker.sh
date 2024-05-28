@@ -203,7 +203,7 @@ if ! confirm_cmd "$docker_enter_cmd"; then
     exit 1
 fi
 
-autorestart_cmd="docker update --restart=always $pure_name"
+autorestart_cmd="$sudo_cmd docker update --restart=always $pure_name"
 if [ "$autorestart" -eq 1 ]; then
     if ! confirm_cmd "$autorestart_cmd"; then
         echo "terminated"
