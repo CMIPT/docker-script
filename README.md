@@ -140,7 +140,7 @@ Let me show you an example creating a user named `kaiser` (note that you should 
 
 1. Let us first connect to the server.
 
-    Open your terminal (choose whatever the shell you like, in `Windows` it is `cmd` or `powershell`, and in `unix-like` system it is `bash`)
+    Open your terminal, and then choose whatever the shell you like, in `Windows` it is `cmd` or `powershell`. It is worth noting that `cmd` is not recommended, `powershell` is recommended, and if you have a `gitbash`, `gitbash` is strongly recommended. In `unix-like` system it is `bash`.
 
     Connect to your docker using this `ssh -p port root@address`, and the `port` and `address` are those the server manager have told you. Input your password (the password the manager have told you). Once it is correct, you will enter your docker (usually in `bash`).
 
@@ -166,9 +166,23 @@ Let me show you an example creating a user named `kaiser` (note that you should 
 
     If you don't have a ssh key, you may need create a new one. This command will help you: `ssh-keygen`. For simple way, you just need press enter key when it requires your confirm. If you already have one, just use the one you have created before.
 
-    Now you already have a ssh key, use this command to upload your ssh key to the docker for user `kaiser`: `ssh-copy-id -p port kaiser@address`, the `port` and the `address` are same with the before ones. Then you just need input the password of `kaiser`.
+    Now you already have a ssh key, use this command to upload your ssh key to the docker for user `kaiser`: `ssh-copy-id -p port kaiser@address`, the `port` and the `address` are same with the before ones. Then you just need input the password of `kaiser`. Note that in `Windows`, there is not a built-in `ssh-copy-id` command. But don't worry, I've found a script that defines a function called `ssh-copy-id`. Copy the code below into your `powershell` (`cmd` does not support this, if you are using `git bash`, `ssh-copy-id` is available). Then press enter key, after this, you can use `ssh-copy-id` in this shell. Then re-run the command `ssh-copy-id -p port kaiser@address`.
 
     If there is no any error, congratulations, you have done. But you have to do some more to make your login more convenient.
+
+    The script for creating a function called `ssh-copy-id` for `powershell`:
+
+```bash
+function ssh-copy-id([string]$userAtMachine, $args){
+    $publicKey = "$ENV:USERPROFILE" + "/.ssh/id_rsa.pub"
+    if (!(Test-Path "$publicKey")){
+        Write-Error "ERROR: failed to open ID file '$publicKey': No such file"
+    }
+    else {
+        & cat "$publicKey" | ssh $args $userAtMachine "umask 077; test -d .ssh || mkdir .ssh ; cat >> .ssh/authorized_keys || exit 1"
+    }
+}
+```
 
 5. Let us do something more to make login with `ssh labserver` possible.
 
