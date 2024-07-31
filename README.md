@@ -1,6 +1,10 @@
 [中文版本](README-zh.md)
 
 # Release Log
+## Release-v0.1.4
+* Add a script creating ssh-copy-id for Windows
+* Add an MIT license
+
 ## Release-v0.1.3
 * Fix typos
 * Add `sudo` before the `docker update --restart=always` command
