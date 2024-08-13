@@ -169,7 +169,7 @@ Note:
 
 4. 为`kaiser`配置`ssh`密钥。
 
-    首先，使用`exit`关闭此连接，并确保现在的`shell`是 **你的系统的`shell` ** (或者你可以通过打开一个新的终端来完成此操作)。
+    首先，使用`exit`关闭此连接，并确保现在的`shell`是 **你的系统的`shell`** (或者你可以通过打开一个新的终端来完成此操作)。
 
     如果你没有`ssh`密钥，可能需要创建一个新的。`ssh-keygen`命令会对你有所帮助。简单来说，你只需要在需要你确认的时候按回车键。如果你已经有了一个，就使用之前创建的那个。
 
@@ -221,7 +221,7 @@ function ssh-copy-id([string]$userAtMachine, $args){
 
 7. 下面这个过程是为了让你的`docker`无法使用密码登录（如果你想这样做，请确保现在你可以使用`ssh`密钥登录）。
 
-    首先，使用`kaiser`登录`docker`。然后在`/etc/ssh/sshd_config`中将`PasswordAuthentication yes`更改为`PasswordAuthentication no`（使用`sudo vim /etc/ssh/sshd_config`来编辑文件）。
+    首先，使用`kaiser`登录`docker`。然后在`/etc/ssh/sshd_config`中将`PasswordAuthentication no`更改为`PasswordAuthentication yes`（使用`sudo vim /etc/ssh/sshd_config`来编辑文件）。
 
     通过命令`sudo service ssh restart `重启你的`ssh`服务。
 
