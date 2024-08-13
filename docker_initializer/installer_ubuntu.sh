@@ -5,6 +5,7 @@ password=$1
 sudo_cmd=$(which sudo)
 
 # before changing source, we must install ca-certificates
+$sudo_cmd chmod 777 /tmp
 $sudo_cmd apt update
 $sudo_cmd apt install -y ca-certificates
 

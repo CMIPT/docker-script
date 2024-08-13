@@ -1,6 +1,10 @@
 [中文版本](README-zh.md)
 
 # Release Log
+## Release-v0.1.4
+* Add a script creating ssh-copy-id for Windows
+* Add an MIT license
+
 ## Release-v0.1.3
 * Fix typos
 * Add `sudo` before the `docker update --restart=always` command
@@ -19,7 +23,7 @@
 # docker-script
 Some scripts for creating and configuring dockers.
 
-Usually, as a server manager, you need create a new docker for someone and configure the docker (e.g., install `oepnssh-server`, configure `sshd`, update the password of `root`, etc.). This can be annoying, if a lot of persons let you create new dockers for them. But, don't worry, this script will help you create a docker and configure it automatically.
+Usually, as a server manager, you need create a new docker for someone and configure the docker (e.g., install `openssh-server`, configure `sshd`, update the password of `root`, etc.). This can be annoying, if a lot of persons let you create new dockers for them. But, don't worry, this script will help you create a docker and configure it automatically.
 
 # How to Use This?
 This part is for the server managers, if you are a user of the new docker, you can jump to [here](#something-for-docker-users).
